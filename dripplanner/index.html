@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Use the DRIP Planning Tool to identify tasks to delegate, replace, invest in, or produce based on what makes money and what makes you happy. Inspired by Dan Martell's book 'Buy Back Your Time'."
+    />
+    <meta
+      name="keywords"
+      content="DRIP Matrix, Dan Martell, Time Management, Buy Back Your Time, Productivity, Task Delegation, Entrepreneurship"
+    />
+    <meta name="Owyss" content="DRIP Planning Tool" />
+    <title>DRIP Planner</title>
+    <link rel="stylesheet" href="https://driptool.glitch.me/style.css" />
+    <script src="https://driptool.glitch.me/script.js"></script>
+  </head>
+  <body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <img
+          src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1744682020/drip_icon_128_ah32mw.png"
+          alt="DRIP Planner"
+          class="navbar-logo"
+        />
+        DRIP Planner
+      </div>
+      <div class="navbar-links">
+        <a href="#" class="navbar-link">Planner</a>
+         <a href="#examples" class="navbar-link">Examples</a>
+      </div>
+    </nav>
+
+    <!-- Main content for screen view -->
+    <section id="planner" class="container">
+      <div class="screen-only">
+        <h1>D.R.I.P Planner</h1>
+        <p class="subtitle">
+          Categorize your tasks based on what makes money (vertical axis) and
+          what energizes you (horizontal axis). Add tasks to each quadrant, then
+          focus on Investment tasks, delegate or outsource Replacement and
+          Delegation tasks, and schedule time for Production tasks that restore
+          your energy.
+        </p>
+        <div class="matrix-container">
+          <div class="labels-desktop">
+            <div class="label-vertical">Makes You Money</div>
+            <div class="label-horizontal">Makes You Happy</div>
+          </div>
+          <div class="matrix">
+            <div class="matrix-mobile-header">Makes You Money</div>
+
+            <!-- Replace Quadrant -->
+            <div class="quadrant">
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Replace
+                  <div class="tooltip-text">
+                    Tasks that generate income but don't energize you. Best
+                    delegated or outsourced to free up time.
+                  </div>
+                </div>
+              </div>
+              <p>Examples: Admin tasks, email replies, bookkeeping</p>
+              <div class="task-list" id="replacement-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="replacement-input"
+                placeholder="Add a task to replace..."
+              />
+              <button class="add-task-btn" onclick="addTask('replacement')">
+                Add Task
+              </button>
+            </div>
+
+            <!-- Invest Quadrant -->
+            <div class="quadrant">
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Invest
+                  <div class="tooltip-text">
+                    Tasks that both energize and make you money. This is your
+                    genius zone—spend most of your time here.
+                  </div>
+                </div>
+              </div>
+              <p>
+                Examples: Vision casting, marketing strategy, content creation
+              </p>
+              <div class="task-list" id="investment-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="investment-input"
+                placeholder="Add a task to invest in..."
+              />
+              <button class="add-task-btn" onclick="addTask('investment')">
+                Add Task
+              </button>
+            </div>
+
+            <div class="matrix-mobile-header">Makes You Happy</div>
+
+            <!-- Delegate Quadrant -->
+            <div class="quadrant">
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Delegate
+                  <div class="tooltip-text">
+                    Tasks that don't energize you but make money. Key to scaling
+                    efficiently.
+                  </div>
+                </div>
+              </div>
+              <p>Examples: Client delivery, onboarding, project management</p>
+              <div class="task-list" id="delegation-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="delegation-input"
+                placeholder="Add a task to delegate..."
+              />
+              <button class="add-task-btn" onclick="addTask('delegation')">
+                Add Task
+              </button>
+            </div>
+
+            <!-- Produce Quadrant -->
+            <div
+              class="quadrant"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--produce-color),
+                  rgba(255, 215, 0, 0.4)
+                );
+                border: 2px solid rgba(255, 215, 0, 0.5);
+              "
+            >
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Produce
+                  <div class="tooltip-text">
+                    Tasks that energize you but don't bring direct income.
+                    Important for your mental well-being.
+                  </div>
+                </div>
+              </div>
+              <p>Examples: Writing, reading, creative side projects</p>
+              <div class="task-list" id="production-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="production-input"
+                placeholder="Add a task to produce..."
+              />
+              <button class="add-task-btn" onclick="addTask('production')">
+                Add Task
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="generate-btn" onclick="showPreview()">
+        Preview and Download PDF
+      </button>
+
+      <div class="credits">
+        <p>
+          This site and tool are inspired by publicly shared concepts from
+          <em>Buy Back Your Time</em> by Dan Martell. All rights to the original
+          material belong to the author. To explore the original book and
+          resources, please visit
+          <a
+            href="https://www.buybackyourtime.com/resources"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            buybackyourtime.com
+          </a>
+        </p>
+      </div>
+
+      <!-- Preview Modal -->
+      <div class="modal-overlay" id="previewModal">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h3 class="modal-title">Preview Your DRIP Planner</h3>
+            <button class="modal-close" onclick="closePreview()">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="preview-options">
+              <div class="option-group">
+                <div class="option-title">View Format</div>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      name="viewFormat"
+                      value="list"
+                      checked
+                      onchange="updatePreview()"
+                    />
+                    <span>List View</span>
+                  </label>
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      name="viewFormat"
+                      value="matrix"
+                      onchange="updatePreview()"
+                    />
+                    <span>Matrix View</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="preview-container">
+              <div id="previewContent" class="paper-preview"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="modal-btn modal-btn-secondary"
+              onclick="closePreview()"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn modal-btn-primary" onclick="printPDF()">
+              Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated printable content area -->
+      <div id="printable-content"></div>
+    </section>
+
+    <!-- Why Use Section -->
+    <div class="why-use-section">
+      <h2>Why Use the DRIP Planning Tool?</h2>
+      <div class="why-use-content">
+        <div class="why-item">
+          <div class="icon-container"><i class="fas fa-search"></i></div>
+          <h3>Discover Your Best Work</h3>
+          <p>
+            Pinpoint the tasks that play to your strengths and actually energize you—so you spend your time where you shine.
+          </p>
+        </div>
+        <div class="why-item">
+          <div class="icon-container"><i class="fas fa-chart-line"></i></div>
+          <h3>Simplify Your Priorities</h3>
+          <p>
+           Turn those insights into a no-fuss daily plan that shows you what to tackle now, what to hand off, and what to streamline.
+          </p>
+        </div>
+        <div class="why-item">
+          <div class="icon-container"><i class="fas fa-bullseye"></i></div>
+          <h3>Build Your DRIP Workflow</h3>
+          <p>
+            Adopt a lightweight routine—Delegate busywork, Replace repetitive steps, Invest in skill-boosting tasks, and Produce high-impact work—so every workday runs smoother.Set clear, achievable goals based on your analysis and track
+            progress.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRIP Examples & FAQ -->
+    <section id="examples" class="get-ready-section">
+   
+      <h2>DRIP Examples</h2>
+      <p>How DRIP Planner applies for different roles.</p>
+      <div class="features">
+        <div class="feature-item">
+          <h3>Learning Designer</h3>
+          <p>
+            Use the DRIP Matrix to prioritize instructional design tasks based
+            on their impact on learner engagement and your personal growth.
+          </p>
+        </div>
+        <div class="feature-item">
+          <h3>Business Operations Manager</h3>
+          <p>
+            Leverage the DRIP Matrix to streamline operational tasks and focus
+            on high-priority areas that improve business efficiency and
+            workflow.
+          </p>
+        </div>
+        <div class="feature-item">
+          <h3>Data Protection Officer</h3>
+          <p>
+            Use the DRIP Matrix to organize tasks related to compliance, risk
+            management, and data security while ensuring alignment with
+            organizational goals.
+          </p>
+        </div>
+      </div>
+      <div class="faq-section">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <strong>What is a DRIP Matrix?</strong>
+            </button>
+            <div class="accordion-content">
+              <p>
+                The DRIP Matrix is a framework for prioritizing tasks based on
+                their impact on your financial and emotional well-being.
+              </p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <strong>How often should I update my DRIP Matrix?</strong>
+            </button>
+            <div class="accordion-content">
+              <p>
+                We recommend updating your DRIP Matrix regularly to ensure
+                you're focusing on the most important tasks.
+              </p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <strong>How can I use DRIP Matrix for career planning?</strong>
+            </button>
+            <div class="accordion-content">
+              <p>
+                Use the DRIP Matrix to identify which tasks to focus on to
+                achieve career goals aligned with your strengths and passions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Made with <span>&#10084;</span> for personal growth</p>
+    </footer>
+  </body>
+</html>
