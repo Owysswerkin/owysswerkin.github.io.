@@ -13,8 +13,8 @@
     />
     <meta name="Owyss" content="DRIP Planning Tool" />
     <title>DRIP Planner</title>
-    <link rel="stylesheet" href="https://driptool.glitch.me/style.css" />
-    <script src="https://driptool.glitch.me/script.js"></script>
+    <link rel="stylesheet" href="https://theboringlearner.com/dripplanner/style.css" />
+    <script src="https://theboringlearner.com/dripplanner/script.js"></script>
   </head>
   <body>
     <!-- Sticky Navbar -->
@@ -75,60 +75,7 @@
                 Add Task
               </button>
             </div>
-
-            <!-- Invest Quadrant -->
-            <div class="quadrant">
-              <div class="tooltip-container">
-                <div class="quadrant-title">
-                  Invest
-                  <div class="tooltip-text">
-                    Tasks that both energize and make you money. This is your
-                    genius zone—spend most of your time here.
-                  </div>
-                </div>
-              </div>
-              <p>
-                Examples: Vision casting, marketing strategy, content creation
-              </p>
-              <div class="task-list" id="investment-tasks"></div>
-              <input
-                type="text"
-                class="task-input"
-                id="investment-input"
-                placeholder="Add a task to invest in..."
-              />
-              <button class="add-task-btn" onclick="addTask('investment')">
-                Add Task
-              </button>
-            </div>
-
-            <div class="matrix-mobile-header">Makes You Happy</div>
-
-            <!-- Delegate Quadrant -->
-            <div class="quadrant">
-              <div class="tooltip-container">
-                <div class="quadrant-title">
-                  Delegate
-                  <div class="tooltip-text">
-                    Tasks that don't energize you but make money. Key to scaling
-                    efficiently.
-                  </div>
-                </div>
-              </div>
-              <p>Examples: Client delivery, onboarding, project management</p>
-              <div class="task-list" id="delegation-tasks"></div>
-              <input
-                type="text"
-                class="task-input"
-                id="delegation-input"
-                placeholder="Add a task to delegate..."
-              />
-              <button class="add-task-btn" onclick="addTask('delegation')">
-                Add Task
-              </button>
-            </div>
-
-            <!-- Produce Quadrant -->
+<!-- Produce Quadrant -->
             <div
               class="quadrant"
               style="
@@ -161,6 +108,59 @@
                 Add Task
               </button>
             </div>
+           
+
+            <div class="matrix-mobile-header">Makes You Happy</div>
+
+            <!-- Delegate Quadrant -->
+            <div class="quadrant">
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Delegate
+                  <div class="tooltip-text">
+                    Tasks that don't energize you but make money. Key to scaling
+                    efficiently.
+                  </div>
+                </div>
+              </div>
+              <p>Examples: Client delivery, onboarding, project management</p>
+              <div class="task-list" id="delegation-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="delegation-input"
+                placeholder="Add a task to delegate..."
+              />
+              <button class="add-task-btn" onclick="addTask('delegation')">
+                Add Task
+              </button>
+            </div>
+ <!-- Invest Quadrant -->
+            <div class="quadrant">
+              <div class="tooltip-container">
+                <div class="quadrant-title">
+                  Invest
+                  <div class="tooltip-text">
+                    Tasks that both energize and make you money. This is your
+                    genius zone—spend most of your time here.
+                  </div>
+                </div>
+              </div>
+              <p>
+                Examples: Vision casting, marketing strategy, content creation
+              </p>
+              <div class="task-list" id="investment-tasks"></div>
+              <input
+                type="text"
+                class="task-input"
+                id="investment-input"
+                placeholder="Add a task to invest in..."
+              />
+              <button class="add-task-btn" onclick="addTask('investment')">
+                Add Task
+              </button>
+            </div>
+            
           </div>
         </div>
       </div>
