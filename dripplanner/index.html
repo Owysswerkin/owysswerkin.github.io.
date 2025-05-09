@@ -1,19 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCF3WLNR9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XCF3WLNR9R');
+</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Use the DRIP Planning Tool to identify tasks to delegate, replace, invest in, or produce based on what makes money and what makes you happy. Inspired by Dan Martell's book 'Buy Back Your Time'."
+      content="Use the DRIP Planner to identify tasks to delegate, replace, invest in, or produce based on what makes money and what makes you happy. Inspired by Dan Martell's book 'Buy Back Your Time'."
     />
     <meta
       name="keywords"
       content="DRIP Matrix, Dan Martell, Time Management, Buy Back Your Time, Productivity, Task Delegation, Entrepreneurship"
     />
-    <meta name="Owyss" content="DRIP Planning Tool" />
+    <meta name="Owyss" content="DRIP Planner" />
     <title>DRIP Planner</title>
-    <link rel="stylesheet" href="https://theboringlearner.com/dripplanner/style.css" />
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="https://res.cloudinary.com/dylxm9fqw/image/upload/v1744681922/drip_icon_afigl1.png"
+      type="image/x-icon"
+    />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Boost your productivity with DRIP Planner. Use the DRIP Matrix to categorize tasks, maximize efficiency, and reclaim your time—perfect for smart employees and entrepreneurs alike."
+    />
+    <meta
+      name="keywords"
+      content="DRIP Planner, DRIP Matrix, task management, productivity, time management, delegation, entrepreneurship, buy back your time"
+    />
+    <meta name="author" content="DRIP Planner" />
+
+    <!-- Open Graph / Facebook -->
+    <meta
+      property="og:title"
+      content="DRIP Planner | Optimize Your Time with the DRIP Matrix"
+    />
+    <meta
+      property="og:description"
+      content="Boost your productivity with DRIP Planner. Use the DRIP Matrix to categorize tasks, maximize efficiency, and reclaim your time—perfect for smart employees and entrepreneurs alike."
+    />
+    <meta
+      property="og:image"
+      content="https://res.cloudinary.com/dylxm9fqw/image/upload/v1744682020/drip_icon_128_ah32mw.png"
+    />
+    <meta
+      property="og:url"
+      content="https://theboringlearner.com/dripplanner"
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="DRIP Planner| Optimize Your Time with the DRIP Matrix"
+    />
+    <meta
+      name="twitter:description"
+      content="Boost your productivity with DRIP Planner. Use the DRIP Matrix to categorize tasks, maximize efficiency, and reclaim your time—perfect for smart employees and entrepreneurs alike."
+    />
+    <meta
+      name="twitter:image"
+      content="https://res.cloudinary.com/dylxm9fqw/image/upload/v1744681922/drip_icon_afigl1.png"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://theboringlearner.com/dripplanner/style.css"
+    />
     <script src="https://theboringlearner.com/dripplanner/script.js"></script>
   </head>
   <body>
@@ -29,20 +92,19 @@
       </div>
       <div class="navbar-links">
         <a href="#" class="navbar-link">Planner</a>
-         <a href="#examples" class="navbar-link">Examples</a>
+        <a href="#examples" class="navbar-link">Examples</a>
       </div>
     </nav>
 
     <!-- Main content for screen view -->
     <section id="planner" class="container">
       <div class="screen-only">
-        <h1>D.R.I.P Planner</h1>
+        <h1>DRIP Planner</h1>
         <p class="subtitle">
-          Categorize your tasks based on what makes money (vertical axis) and
-          what energizes you (horizontal axis). Add tasks to each quadrant, then
-          focus on Investment tasks, delegate or outsource Replacement and
-          Delegation tasks, and schedule time for Production tasks that restore
-          your energy.
+          Categorize your tasks based on what makes money and what makes you
+          happy. Add tasks to each quadrant, then focus on Investment tasks,
+          delegate or outsource Replacement and Delegation tasks, and schedule
+          time for Production tasks that recharges you!
         </p>
         <div class="matrix-container">
           <div class="labels-desktop">
@@ -63,7 +125,10 @@
                   </div>
                 </div>
               </div>
-              <p>Examples: Admin tasks, email replies, bookkeeping</p>
+              <p>
+                Examples: Admin tasks, Sending payment reminders, Social-media
+                scheduling, Manually logging customer data
+              </p>
               <div class="task-list" id="replacement-tasks"></div>
               <input
                 type="text"
@@ -75,18 +140,8 @@
                 Add Task
               </button>
             </div>
-<!-- Produce Quadrant -->
-            <div
-              class="quadrant"
-              style="
-                background: linear-gradient(
-                  135deg,
-                  var(--produce-color),
-                  rgba(255, 215, 0, 0.4)
-                );
-                border: 2px solid rgba(255, 215, 0, 0.5);
-              "
-            >
+            <!-- Produce Quadrant -->
+            <div class="quadrant">
               <div class="tooltip-container">
                 <div class="quadrant-title">
                   Produce
@@ -96,7 +151,10 @@
                   </div>
                 </div>
               </div>
-              <p>Examples: Writing, reading, creative side projects</p>
+              <p>
+                Examples: Drafting newsletter, Creating offer page, Conducting
+                paid webinar
+              </p>
               <div class="task-list" id="production-tasks"></div>
               <input
                 type="text"
@@ -108,7 +166,6 @@
                 Add Task
               </button>
             </div>
-           
 
             <div class="matrix-mobile-header">Makes You Happy</div>
 
@@ -123,7 +180,10 @@
                   </div>
                 </div>
               </div>
-              <p>Examples: Client delivery, onboarding, project management</p>
+              <p>
+                Examples: Filing receipts, Scheduling meetings, Updating status
+                reports
+              </p>
               <div class="task-list" id="delegation-tasks"></div>
               <input
                 type="text"
@@ -135,8 +195,18 @@
                 Add Task
               </button>
             </div>
- <!-- Invest Quadrant -->
-            <div class="quadrant">
+            <!-- Invest Quadrant -->
+            <div
+              class="quadrant"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--produce-color),
+                  rgba(255, 215, 0, 0.4)
+                );
+                border: 2px solid rgba(255, 215, 0, 0.5);
+              "
+            >
               <div class="tooltip-container">
                 <div class="quadrant-title">
                   Invest
@@ -147,7 +217,8 @@
                 </div>
               </div>
               <p>
-                Examples: Vision casting, marketing strategy, content creation
+                Examples: Brainstorming new services, Sketching online course
+                ideas, Practicing pitching skills
               </p>
               <div class="task-list" id="investment-tasks"></div>
               <input
@@ -160,7 +231,6 @@
                 Add Task
               </button>
             </div>
-            
           </div>
         </div>
       </div>
@@ -245,28 +315,32 @@
 
     <!-- Why Use Section -->
     <div class="why-use-section">
-      <h2>Why Use the DRIP Planning Tool?</h2>
+      <h2>Why Use DRIP Planner?</h2>
       <div class="why-use-content">
         <div class="why-item">
           <div class="icon-container"><i class="fas fa-search"></i></div>
           <h3>Discover Your Best Work</h3>
           <p>
-            Pinpoint the tasks that play to your strengths and actually energize you—so you spend your time where you shine.
+            Pinpoint the tasks that play to your strengths and actually energize
+            you—so you spend your time where you shine.
           </p>
         </div>
         <div class="why-item">
           <div class="icon-container"><i class="fas fa-chart-line"></i></div>
           <h3>Simplify Your Priorities</h3>
           <p>
-           Turn those insights into a no-fuss daily plan that shows you what to tackle now, what to hand off, and what to streamline.
+            Turn those insights into a no-fuss daily plan that shows you what to
+            tackle now, what to hand off, and what to streamline.
           </p>
         </div>
         <div class="why-item">
           <div class="icon-container"><i class="fas fa-bullseye"></i></div>
           <h3>Build Your DRIP Workflow</h3>
           <p>
-            Adopt a lightweight routine—Delegate busywork, Replace repetitive steps, Invest in skill-boosting tasks, and Produce high-impact work—so every workday runs smoother.Set clear, achievable goals based on your analysis and track
-            progress.
+            Adopt a lightweight routine—Delegate busywork, Replace repetitive
+            steps, Invest in skill-boosting tasks, and Produce high-impact
+            work—so every workday runs smoother.Set clear, achievable goals
+            based on your analysis and track progress.
           </p>
         </div>
       </div>
@@ -274,7 +348,6 @@
 
     <!-- DRIP Examples & FAQ -->
     <section id="examples" class="get-ready-section">
-   
       <h2>DRIP Examples</h2>
       <p>How DRIP Planner applies for different roles.</p>
       <div class="features">
