@@ -733,18 +733,16 @@ h2 {
 }
 
 .accordion-content {
-  padding: 1rem;
-  background-color: #f8f9fa;
   display: none;
-  font-size: 1rem;
-  color: #555;
-  border-radius: 6px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  /* max-height hack if you want smooth open/close: */
+  max-height: 0;
 }
-
 .accordion-item.active .accordion-content {
   display: block;
+  max-height: 500px; /* or whatever max you need */
 }
-
 .accordion-item.active .accordion-header {
   background-color: #0056b3;
 }
