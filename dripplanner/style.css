@@ -144,6 +144,14 @@ html {
         );
         border: 2px solid rgba(127, 255, 0, 0.5);
       }
+.quadrant:nth-child(3) {
+        background: linear-gradient(
+          135deg,
+          var(--delegate-color),
+          rgba(255, 105, 180, 0.4)
+        );
+        border: 2px solid rgba(127, 255, 0, 0.5);
+      }
 
 
       /* Glossy effect overlay */
