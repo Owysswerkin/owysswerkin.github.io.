@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goal Task Mapping Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing);
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 1.25rem;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .navbar-brand img {
+        width: 64px;
+        height: 64px;
+        margin-right: -1em 0.5rem;
+      }
+      .navbar-links a {
+        margin-left: var(--spacing);
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--primary);
+        font-family: "IBM Plex Mono", monospace;
+      }
+      /* Additional top margin for hero */
+      #planner { margin-top: calc(var(--spacing) * 2); }
+      /* Hero Title */
+      #planner h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: var(--spacing);
+      }
+      /* Highlighted word */
+      .highlight { background-color: var(--accent); padding: -0.2em;}
+      /* Subtitle */
+      #planner .subtitle {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: calc(var(--spacing) * 1.5);
+      }
+
+      :root {
+        --primary: #333;
+        --accent: #f5d547;
+        --bg: #fafafa;
+        --spacing: 1.5rem;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      footer {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #777;
+        padding-top: var(--spacing);
+        font-family: "IBM Plex Mono", monospace;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--primary);
+        background: var(--bg)
+          url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L0 0 0 20' fill='none' stroke='%23eaeaea'/%3E%3C/svg%3E")
+          repeat;
+        line-height: 1.6;
+        padding: var(--spacing);
+      }
+      .container {
+        max-width: 72rem;
+        margin: 0 auto;
+      }
+      .glass {
+        background-color: #d1f5e0; /* soft pastel peach inspired by the hat logo */
+        border: 1px solid #ffd6cc; /* subtle light border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* gentle depth */
+      }
+      /* Updated Waitlist Button Styling */
+      .wait-button {
+        background: var(--accent);
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 1rem 1.5rem;
+        margin-left: 1rem;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 0 #cfa2ff;
+        transition: transform 0.1s ease-in-out;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .wait-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 0 #cfa2ff;
+      }
+
+      /* Print only the preview content */
+      @media print {
+        /* Hide everything */
+        body * {
+          display: none !important;
+          visibility: hidden !important;
+        }
+        /* Show preview modal and its content */
+        #preview-modal,
+        #preview-modal * {
+          display: block !important;
+          visibility: visible !important;
+        }
+        /* Position preview modal content full-page */
+        #preview-modal {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: white !important;
+          padding: 1rem;
+        }
+        #preview-content {
+          max-height: none !important;
+          overflow: visible !important;
+        }
+        /* Ensure PDF pages break nicely */
+        #preview-content p {
+          page-break-inside: avoid;
+        }
+        /* Hide all preview-modal buttons except Save PDF */
+        #preview-modal button:not(#save-pdf-btn) {
+          display: none !important;
+        }
+      }
+    </style>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar container">
+      <div class="navbar-brand">
+        <img
+          src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
+          alt="theboringlearner logo"
+        />
+        The Boring Learner
+      </div>
+      <div class="navbar-links">
+        <a href="https://theboringlearner.com/dripplanner/">DRIP Planner</a>
+        <button class="wait-button">Join the Waitlist</button>
+      </div>
+    </nav>
+    <section id="planner" class="container">
+      <h1>Goal Task <span class="highlight">Mapping</span></h1>
+      <p class="subtitle">Write better goals</p>
+    <div id="root" class="space-y-4 max-w-lg mx-auto mt-10">
+      <!-- Initial Goal Container -->
+      <div class="goal-set border rounded-lg p-4 space-y-2 shadow glass">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <h2 class="editable-header font-bold text-lg">Header 1</h2>
+            <button class="edit-header text-gray-500 text-sm">Edit</button>
+          </div>
+          <button class="toggle-goal text-xl font-bold">−</button>
+        </div>
+        <div class="goal-content space-y-2">
+          <div class="action-container border rounded-md shadow glass">
+            <div
+              class="header flex items-center justify-between px-3 py-2 cursor-pointer"
+            >
+              <div class="flex items-center gap-2">
+                <h2 class="editable-header title font-bold text-base">Goal</h2>
+                <button class="edit-header text-gray-500 text-sm">Edit</button>
+              </div>
+            </div>
+            <div class="items space-y-1 pl-4 pr-3 pb-2"></div>
+            <div class="input-group flex items-center space-x-2 pl-4 pr-3 pb-3">
+              <input
+                class="flex-1 p-1 border rounded text-sm"
+                type="text"
+                placeholder="Add new goal…"
+              />
+              <button
+                class="submit-btn w-8 h-8 bg-black text-white rounded-full flex items-center justify-center"
+              >
+                ↑
+              </button>
+            </div>
+          </div>
+
+          <div class="action-container border rounded-md shadow glass">
+            <div class="header cursor-pointer px-3 py-2">
+              <div class="flex items-center gap-2">
+                <h2 class="editable-header title font-bold text-base">
+                  Desired outcome
+                </h2>
+                <button class="edit-header text-gray-500 text-sm">Edit</button>
+              </div>
+            </div>
+            <div class="items space-y-1 pl-4 pr-3 pb-2"></div>
+            <div
+              class="input-group hidden flex items-center space-x-2 pl-4 pr-3 pb-3"
+            >
+              <input
+                class="flex-1 p-1 border rounded text-sm"
+                type="text"
+                placeholder="Add desired outcome…"
+              />
+              <button
+                class="submit-btn w-8 h-8 bg-black text-white rounded-full flex items-center justify-center"
+              >
+                ↑
+              </button>
+            </div>
+
+            <div class="action-container border rounded-md mt-3 shadow glass">
+              <div class="header cursor-pointer px-3 py-2">
+                <div class="flex items-center gap-2">
+                  <h3 class="editable-header title font-bold text-sm">
+                    Big action
+                  </h3>
+                  <button class="edit-header text-gray-500 text-sm">
+                    Edit
+                  </button>
+                </div>
+              </div>
+              <div class="items space-y-1 pl-4 pr-3 pb-2"></div>
+              <div
+                class="input-group hidden flex items-center space-x-2 pl-4 pr-3 pb-3"
+              >
+                <input
+                  class="flex-1 p-1 border rounded text-sm"
+                  placeholder="Add big action…"
+                />
+                <button
+                  class="submit-btn w-8 h-8 bg-black text-white rounded-full flex items-center justify-center"
+                >
+                  ↑
+                </button>
+              </div>
+
+              <div class="action-container border rounded-md mt-3 shadow glass">
+                <div class="header cursor-pointer px-3 py-2">
+                  <div class="flex items-center gap-2">
+                    <h4 class="editable-header title font-bold text-sm">
+                      Sub-action
+                    </h4>
+                    <button class="edit-header text-gray-500 text-sm">
+                      Edit
+                    </button>
+                  </div>
+                </div>
+                <div class="items space-y-1 pl-4 pr-3 pb-2"></div>
+                <div
+                  class="input-group hidden flex items-center space-x-2 pl-4 pr-3 pb-3"
+                >
+                  <input
+                    class="flex-1 p-1 border rounded text-sm"
+                    placeholder="Add sub‑action…"
+                  />
+                  <button
+                    class="submit-btn w-8 h-8 bg-black text-white rounded-full flex items-center justify-center"
+                  >
+                    ↑
+                  </button>
+                </div>
+
+                <div
+                  class="action-container border rounded-md mt-3 shadow glass"
+                >
+                  <div class="header cursor-pointer px-3 py-2">
+                    <div class="flex items-center gap-2">
+                      <h5 class="editable-header title font-bold text-sm">
+                        Sub-sub-action
+                      </h5>
+                      <button class="edit-header text-gray-500 text-sm">
+                        Edit
+                      </button>
+                    </div>
+                  </div>
+                  <div class="items space-y-1 pl-4 pr-3 pb-2"></div>
+                  <div
+                    class="input-group hidden flex items-center space-x-2 pl-4 pr-3 pb-3"
+                  >
+                    <input
+                      class="flex-1 p-1 border rounded text-sm"
+                      placeholder="Add sub‑sub‑action…"
+                    />
+                    <button
+                      class="submit-btn w-8 h-8 bg-black text-white rounded-full flex items-center justify-center"
+                    >
+                      ↑
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Goal and Preview Button -->
+    <div class="text-center space-x-4 mt-6">
+      <button
+        id="add-goal"
+        class="bg-blue-600 text-white px-4 py-2 rounded shadow"
+      >
+        Add New Goal
+      </button>
+      <button
+        id="preview-btn"
+        class="bg-green-600 text-white px-4 py-2 rounded shadow"
+      >
+        Preview and Export
+      </button>
+    </div>
+
+    <!-- Preview Modal -->
+    <div
+      id="preview-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg w-11/12 max-w-xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">Preview</h3>
+          <button onclick="closePreview()" class="text-gray-500 text-xl">
+            ×
+          </button>
+        </div>
+        <div
+          id="preview-content"
+          class="space-y-4 max-h-[60vh] overflow-y-auto"
+        ></div>
+        <div class="flex justify-end mt-4">
+          <button
+            onclick="closePreview()"
+            class="mr-2 px-4 py-2 bg-gray-200 rounded"
+          >
+            Close
+          </button>
+          <button
+            onclick="window.print()"
+            class="px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            Save PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("click", (e) => {
+        // Add new item on submit
+        if (e.target.matches(".submit-btn")) {
+          const container = e.target.closest(".action-container");
+          const input = container.querySelector("input");
+          const items = container.querySelector(".items");
+          if (input.value.trim()) {
+            const p = document.createElement("p");
+            const span = document.createElement("span");
+            span.textContent = input.value.trim();
+            const removeBtn = document.createElement("button");
+            removeBtn.innerHTML =
+              '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+            removeBtn.className = "ml-2 text-red-500 text-sm print:hidden";
+            removeBtn.onclick = () => p.remove();
+            p.className = "flex items-center justify-between";
+            p.appendChild(span);
+            p.appendChild(removeBtn);
+            items.appendChild(p);
+            input.value = "";
+          }
+        }
+
+        // Toggle input visibility when clicking anywhere in the header
+        const header = e.target.closest(".header");
+        if (header) {
+          const group = header
+            .closest(".action-container")
+            .querySelector(".input-group");
+          if (group) group.classList.toggle("hidden");
+        }
+
+        // Collapse/expand entire goal
+        if (e.target.matches(".toggle-goal")) {
+          e.target
+            .closest(".goal-set")
+            .querySelector(".goal-content")
+            .classList.toggle("hidden");
+        }
+
+        // Edit header text
+        if (e.target.matches(".edit-header")) {
+          const title = e.target
+            .closest("div")
+            .querySelector(".editable-header");
+          const inp = document.createElement("input");
+          inp.value = title.textContent;
+          inp.className = "border font-bold";
+          inp.setAttribute("data-tag", title.tagName.toLowerCase());
+          inp.setAttribute("data-class", title.className);
+          title.replaceWith(inp);
+          inp.focus();
+          e.target.textContent = "Done";
+          function saveHeaderEdit() {
+            const h = document.createElement(inp.getAttribute("data-tag"));
+            h.className = inp.getAttribute("data-class");
+            h.textContent = inp.value;
+            inp.replaceWith(h);
+            e.target.textContent = "Edit";
+          }
+          inp.addEventListener("blur", saveHeaderEdit);
+          inp.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter") {
+              ev.preventDefault();
+              saveHeaderEdit();
+            }
+          });
+        }
+      });
+
+      // Add another goal set
+      document.getElementById("add-goal").addEventListener("click", () => {
+        const first = document.querySelector(".goal-set");
+        const clone = first.cloneNode(true);
+        clone.querySelectorAll("input").forEach((i) => (i.value = ""));
+        clone.querySelectorAll(".items").forEach((d) => (d.innerHTML = ""));
+        document.getElementById("root").appendChild(clone);
+      });
+
+      // Preview logic remains unchanged
+      document.getElementById("preview-btn").addEventListener("click", () => {
+        const preview = document.getElementById("preview-content");
+        preview.innerHTML = "";
+        function createIndentedElement(text, level) {
+          const el = document.createElement("p");
+          el.style.marginBottom = "0.5em";
+          const indent = document.createElement("span");
+          indent.style.display = "inline-block";
+          indent.style.width = `${level * 1.2}em`;
+          indent.style.textAlign = "right";
+          indent.style.fontFamily = "monospace";
+          indent.textContent = level > 0 ? "└" : "";
+          const content = document.createElement("span");
+          content.textContent = text;
+          el.appendChild(indent);
+          el.appendChild(content);
+          el.style.fontSize = `${1.1 - level * 0.05}rem`;
+          el.style.fontWeight = "bold";
+          return el;
+        }
+        document.querySelectorAll(".goal-set").forEach((goalSet) => {
+          const header = goalSet.querySelector("h2.editable-header");
+          if (header)
+            preview.appendChild(createIndentedElement(header.textContent, 0));
+          function traverse(container, depth) {
+            const title = container.querySelector(".header .editable-header");
+            if (!title) return;
+            preview.appendChild(
+              createIndentedElement(title.textContent, depth)
+            );
+            container.querySelectorAll(":scope > .items > p").forEach((p) => {
+              const itemEl = createIndentedElement(p.textContent, depth + 1);
+              itemEl.style.fontWeight = "normal";
+              preview.appendChild(itemEl);
+            });
+            container
+              .querySelectorAll(":scope > .action-container")
+              .forEach((child) => traverse(child, depth + 1));
+          }
+          goalSet
+            .querySelectorAll(":scope > .goal-content > .action-container")
+            .forEach((container) => traverse(container, 1));
+        });
+        document.getElementById("preview-modal").classList.remove("hidden");
+      });
+
+      function closePreview() {
+        document.getElementById("preview-modal").classList.add("hidden");
+      }
+
+      // Enter key binds
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          if (e.target.matches(".input-group input")) {
+            e.preventDefault();
+            const btn = e.target.parentElement.querySelector(".submit-btn");
+            if (btn) btn.click();
+          } else if (e.target.matches("input[data-tag]")) {
+            e.preventDefault();
+            const tag = e.target.getAttribute("data-tag");
+            const cls = e.target.getAttribute("data-class");
+            const replacement = document.createElement(tag);
+            replacement.className = cls;
+            replacement.textContent = e.target.value;
+            e.target.replaceWith(replacement);
+          }
+        }
+      });
+    </script>
+    <footer class="container">© 2025 The Boring Learner</footer>
+  </body>
+</html>
