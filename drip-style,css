@@ -1,0 +1,865 @@
+
+      :root {
+        --bg: #f8f9fa;
+        --text: #212529;
+        --border: #ced4da;
+        --primary: #007bff;
+        --tooltip-bg: rgba(0, 0, 0, 0.85);
+        --modal-overlay: rgba(0, 0, 0, 0.5);
+
+        /* 90s Colors for Quadrants */
+        --replace-color: rgba(255, 105, 180, 0.7); /* Hot Pink */
+        --invest-color: rgba(0, 255, 255, 0.7); /* Cyan */
+        --delegate-color: rgba(0, 255, 0, 0.7); /* Chartreuse */
+        --produce-color: rgba(255, 215, 0, 0.7); /* Gold */
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        padding: 0;
+      }
+
+html {
+  scroll-behavior: smooth;
+}
+      /* Sticky Navbar */
+      .navbar {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.8rem 2rem;
+        z-index: 1000;
+      }
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #333;
+      }
+
+      .navbar-logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      .navbar-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .navbar-link {
+        color: #555;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .navbar-link:hover {
+        color: var(--primary);
+      }
+
+      .container {
+        padding: 2rem 2rem 1rem;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin: 2rem 0 0.5rem;
+      }
+
+      .subtitle {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 2rem;
+        line-height: 1.4;
+        color: #555;
+      }
+
+      .matrix-container {
+        position: relative;
+        max-width: 900px;
+        margin: 3rem auto 0;
+      }
+
+      .matrix {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        position: relative;
+      }
+
+      /* Glass effect for quadrants */
+      .quadrant {
+        border-radius: 12px;
+        padding: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(
+          135deg,
+          var(--replace-color),
+          rgba(255, 105, 180, 0.4)
+        );
+        border: 2px solid rgba(255, 105, 180, 0.5);
+      }
+
+      /* Individual quadrant styles with 90s colors */
+      .quadrant:nth-child(1) {
+        background: linear-gradient(
+          135deg,
+          var(--replace-color),
+          rgba(255, 105, 180, 0.4)
+        );
+        border: 2px solid rgba(255, 105, 180, 0.5);
+      }
+
+      .quadrant:nth-child(2) {
+        background: linear-gradient(
+          135deg,
+          var(--invest-color),
+          rgba(0, 255, 255, 0.4)
+        );
+        border: 2px solid rgba(0, 255, 255, 0.5);
+      }
+
+      .quadrant:nth-child(3) {
+        background: linear-gradient(
+          135deg,
+          var(--delegate-color),
+          rgba(127, 255, 0, 0.4)
+        );
+        border: 2px solid rgba(127, 255, 0, 0.5);
+      }
+.quadrant:nth-child(3) {
+        background: linear-gradient(
+          135deg,
+          var(--delegate-color),
+          rgba(255, 105, 180, 0.4)
+        );
+        border: 2px solid rgba(127, 255, 0, 0.5);
+      }
+
+
+      /* Glossy effect overlay */
+      .quadrant::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.5),
+          rgba(255, 255, 255, 0.2)
+        );
+        border-radius: 10px 10px 0 0;
+        pointer-events: none;
+      }
+
+      .quadrant-title {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+        position: relative;
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+      }
+
+      .tooltip-container {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      .tooltip-text {
+        display: none;
+        position: absolute;
+        top: 125%;
+        left: 0;
+        background: var(--tooltip-bg);
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        width: 240px;
+        z-index: 10;
+        white-space: normal;
+      }
+
+      .tooltip-container:hover .tooltip-text {
+        display: block;
+      }
+
+      .tooltip-text.show {
+        display: block;
+      }
+
+      .labels-desktop {
+        display: none;
+      }
+
+      .label-vertical {
+        position: absolute;
+        left: -5.5rem;
+        top: 55%;
+        transform: rotate(-90deg) translateX(50%);
+        transform-origin: center;
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      .label-horizontal {
+        position: absolute;
+        bottom: -2.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      .task-input {
+        width: 95%;
+        margin-top: 10px;
+        padding: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      .task-list {
+        margin-top: 10px;
+        min-height: 150px;
+      }
+
+      .task-item {
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 8px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .delete-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .add-task-btn {
+        margin-top: 8px;
+        padding: 6px 12px;
+        background-color: rgba(0, 123, 255, 0.8);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .add-task-btn:hover {
+        background-color: rgba(0, 123, 255, 1);
+      }
+
+      .generate-btn {
+        display: block;
+        margin: 5rem 0 3rem auto;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .credits {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 2rem;
+      }
+
+      .matrix-mobile-header {
+        display: none;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 1rem 0 0.5rem;
+      }
+
+      /* Modal styles */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--modal-overlay);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        padding: 10px;
+      }
+
+      .modal-container {
+        background-color: white;
+        border-radius: 8px;
+        max-width: 900px;
+        width: 95%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #777;
+      }
+
+      .modal-body {
+        padding: 15px;
+        overflow: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid var(--border);
+        text-align: right;
+      }
+
+      .modal-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      .modal-btn-primary {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .modal-btn-secondary {
+        background-color: #6c757d;
+        color: white;
+      }
+
+      /* Preview options */
+      .preview-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .option-group {
+        border: 1px solid var(--border);
+        padding: 10px 15px;
+        border-radius: 5px;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .option-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 15px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* Preview styles */
+      .preview-container {
+        border: 1px solid var(--border);
+        flex: 1;
+        background-color: white;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+      }
+
+      .paper-preview {
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto;
+      }
+
+      /* Matrix print view */
+      .print-matrix-container {
+        position: relative;
+        width: 100%;
+        min-height: 500px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .print-matrix {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 2px;
+        border: 1px solid #ddd;
+        height: 100%;
+        margin: 40px 40px 60px;
+      }
+
+      .print-quadrant {
+        padding: 15px;
+        border: 1px solid #ddd;
+        background-color: white;
+      }
+
+      .print-quadrant h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+
+      .print-axes-label {
+        position: absolute;
+        font-weight: bold;
+      }
+
+      .print-vertical-axis {
+        transform: rotate(-90deg);
+        transform-origin: left center;
+        position: absolute;
+        left: 10px;
+        top: 50%;
+      }
+
+      .print-horizontal-axis {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* List view */
+      .list-view .section {
+        margin-bottom: 25px;
+      }
+
+      .list-view h2 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+      }
+
+      .list-view p.description {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-style: italic;
+        color: #555;
+        font-size: 0.9rem;
+      }
+
+      .list-view table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .list-view th {
+        background-color: #f2f2f2;
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      .list-view td {
+        padding: 8px;
+        border: 1px solid #ddd;
+      }
+
+      .list-view tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      .watermark {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        font-size: 0.8rem;
+        width: 80%;
+        color: #aaa;
+      }
+
+      #printable-content {
+        display: none;
+      }
+
+      @media screen and (max-width: 767px) {
+        .matrix {
+          grid-template-columns: 1fr;
+        }
+        .matrix-mobile-header {
+          display: block;
+        }
+        .matrix-container {
+          margin-top: 1rem;
+        }
+        .preview-options {
+          flex-direction: column;
+        }
+        .navbar {
+          padding: 0.8rem 1rem;
+        }
+        .navbar-brand {
+          font-size: 1.2rem;
+        }
+        .navbar-links {
+          gap: 0.8rem;
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        .labels-desktop {
+          display: block;
+        }
+      }
+
+      a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      /* Print styles */
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+
+        #printable-content,
+        #printable-content * {
+          visibility: visible;
+          display: block;
+        }
+
+        #printable-content {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          padding: 1cm;
+          box-sizing: border-box;
+        }
+
+        .no-print {
+          display: none !important;
+        }
+      }
+
+ /* --------------------------------------------------
+   1. SECTION PADDING & MARGIN
+-------------------------------------------------- */
+.why-use-section {
+  margin: 3rem 2rem;      /* 3rem top/bottom, 2rem left/right */
+  text-align: center;
+}
+
+/* --------------------------------------------------
+   2. WRAPPER → FLEX LAYOUT
+-------------------------------------------------- */
+.why-use-content {
+  display: flex;                /* enable flex properties */
+  flex-wrap: wrap;              /* wrap on small screens */
+  justify-content: space-between;
+  gap: 2rem;                    /* equal gutters between cards */
+  
+  max-width: 1200px;            /* optional width cap */
+  margin: 2rem auto 0 auto;     /* center horizontally */
+}
+
+/* --------------------------------------------------
+   3. CARD STYLING
+-------------------------------------------------- */
+.why-item {
+  flex: 1 1 calc(33.333% - 2rem);
+  min-width: 250px;             /* don’t shrink too far */
+  padding: 2rem;
+  border: 2px solid #ced4da;
+  border-radius: 10px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.why-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------------------------------------
+   4. ICON STYLING
+-------------------------------------------------- */
+.icon-container {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+
+.why-item h3 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.why-item p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Center the section title */
+h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 767px) {
+  .why-use-content {
+    justify-content: center; /* Centers the items */
+  }
+
+  .why-item {
+    width: 80%; /* Makes the items take up most of the screen width */
+    margin: 0.5rem 0; /* Adds vertical margin between items */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* Smaller font size for mobile */
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Desktop View Adjustments */
+@media screen and (min-width: 768px) {
+  .why-use-content {
+    justify-content: space-evenly; /* Ensures even spacing between items */
+  }
+
+  .why-item {
+    width: 28%; /* Adjust the width to ensure three items are nicely spaced */
+    text-align: center;
+  }
+}
+
+
+
+/* Center the FAQ section title */
+.faq-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Accordion styles */
+.accordion {
+  margin-top: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.accordion-item {
+  margin-bottom: 1rem;
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: white;
+  text-align: left;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.accordion-header:hover {
+  background-color: #0056b3;
+}
+
+.accordion-content {
+  display: none;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  /* max-height hack if you want smooth open/close: */
+  max-height: 0;
+}
+.accordion-item.active .accordion-content {
+  display: block;
+  max-height: 500px; /* or whatever max you need */
+}
+.accordion-item.active .accordion-header {
+  background-color: #0056b3;
+}
+/* Get Ready for SWOT Pro Section */
+.get-ready-section {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.get-ready-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.get-ready-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-item {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 2rem;
+  width: 30%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.feature-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-item p {
+  font-size: 1rem;
+}
+
+/* 404 Not Found Section */
+.not-found {
+  background-color: #f8d7da;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: 10px;
+}
+
+.not-found h3 {
+  font-size: 1.8rem;
+  color: #721c24;
+}
+
+.not-found p {
+  font-size: 1.2rem;
+  color: #721c24;
+}
+
+/* Footer */
+.footer {
+  margin-top: 3rem;
+  font-size: 1rem;
+  color: #555;
+  background-color: #fff; /* White background */
+  padding: 1rem 2rem;
+  border-top: 1px solid #ddd; /* Optional: Adds a subtle border on top */
+  text-align: center;
+}
+
+.footer span {
+  color: red;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 767px) {
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-item {
+    width: 80%; /* Make the items stack vertically on mobile */
+    margin: 0.5rem 0;
+  }
+
+  .get-ready-section h2 {
+    font-size: 2rem;
+  }
+
+  .get-ready-section p {
+    font-size: 1rem;
+  }
+
+  .not-found h3 {
+    font-size: 1.5rem;
+  }
+
+  .footer {
+    font-size: 1.1rem;
+  }
+}
