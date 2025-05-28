@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goal Task Mapping Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #mapCanvas {
+        z-index: 0;
+      }
+      .node {
+        z-index: 10;
+        cursor: grab;
+      }
+      .node:active {
+        cursor: grabbing;
+      }
+      .node-text {
+        z-index: 11;
+        pointer-events: none;
+        font-size: 0.75rem;
+        color: #374151;
+        position: absolute;
+      }
+      .linking {
+        outline: 3px dashed #3b82f6;
+        border-radius: 9999px;
+      }
+      .hidden {
+        display: none;
+      }
+      canvas {
+        display: block;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing);
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 1.25rem;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .navbar-brand img {
+        width: 64px;
+        height: 64px;
+        margin-right: -1em 0.5rem;
+      }
+      .navbar-links a {
+        margin-left: var(--spacing);
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--primary);
+        font-family: "IBM Plex Mono", monospace;
+      }
+      /* Additional top margin for hero */
+      #planner {
+        margin-top: calc(var(--spacing) * 2);
+      }
+      /* Hero Title */
+      #planner h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: var(--spacing);
+      }
+      /* Highlighted word */
+      .highlight {
+        background-color: var(--accent);
+        padding: -0.2em;
+      }
+      /* Subtitle */
+      #planner .subtitle {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: calc(var(--spacing) * 1.5);
+      }
+
+      :root {
+        --primary: #333;
+        --accent: #f5d547;
+        --bg: #fafafa;
+        --spacing: 1.5rem;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      footer {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #777;
+        padding-top: var(--spacing);
+        font-family: "IBM Plex Mono", monospace;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--primary);
+        background: var(--bg)
+          url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L0 0 0 20' fill='none' stroke='%23eaeaea'/%3E%3C/svg%3E")
+          repeat;
+        line-height: 1.6;
+        padding: var(--spacing);
+      }
+      .container {
+        max-width: 72rem;
+        margin: 0 auto;
+      }
+      .glass {
+        background-color: #d1f5e0; /* soft pastel peach inspired by the hat logo */
+        border: 1px solid #ffd6cc; /* subtle light border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* gentle depth */
+      }
+      /* Updated Waitlist Button Styling */
+      .wait-button {
+        background: var(--accent);
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 1rem 1.5rem;
+        margin-left: 1rem;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 0 #cfa2ff;
+        transition: transform 0.1s ease-in-out;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .wait-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 0 #cfa2ff;
+      }
+
+      /* Print only the preview content */
+      @media print {
+        /* Hide everything */
+        body * {
+          display: none !important;
+          visibility: hidden !important;
+        }
+        /* Show preview modal and its content */
+        #preview-modal,
+        #preview-modal * {
+          display: block !important;
+          visibility: visible !important;
+        }
+        /* Position preview modal content full-page */
+        #preview-modal {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: white !important;
+          padding: 1rem;
+        }
+        #preview-content {
+          max-height: none !important;
+          overflow: visible !important;
+        }
+        /* Ensure PDF pages break nicely */
+        #preview-content p {
+          page-break-inside: avoid;
+        }
+        /* Hide all preview-modal buttons except Save PDF */
+        #preview-modal button:not(#save-pdf-btn) {
+          display: none !important;
+        }
+      }
+    </style>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar container">
+      <div class="navbar-brand">
+        <img
+          src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
+          alt="theboringlearner logo"
+        />
+        The Boring Learner
+      </div>
+      <div class="navbar-links">
+        <a href="https://theboringlearner.com/dripplanner/">DRIP Planner</a>
+        <button class="wait-button">Join the Waitlist</button>
+      </div>
+    </nav>
+    <section id="planner" class="container">
+      <h1>Action <span class="highlight">Mapping</span></h1>
+      <p class="subtitle">Map it</p>
+    </section>
+    <div id="root" class="max-w-lg mx-auto mt-10">
+      <!-- Initial Goal Container -->
+      <div class="flex items-center gap-4 mb-4">
+        <span class="font-semibold text-gray-700">Add Node:</span>
+        <button class="add-icon" data-type="info">
+          <img
+            src="https://img.icons8.com/fluency/48/000000/info.png"
+            class="w-8 h-8"
+          />
+        </button>
+        <button class="add-icon" data-type="hand">
+          <img
+            src="https://img.icons8.com/fluency/48/000000/hand.png"
+            class="w-8 h-8"
+          />
+        </button>
+        <button class="add-icon" data-type="alert">
+          <img
+            src="https://img.icons8.com/fluency/48/000000/error.png"
+            class="w-8 h-8"
+          />
+        </button>
+        <button class="add-icon" data-type="target">
+          <img
+            src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348394/favicon-32x32_aot5gn.png"
+            class="w-8 h-8"
+          />
+        </button>
+        <span id="connectHint" class="text-sm text-blue-600 hidden"
+          >Shift-click another node to connect</span
+        >
+      </div>
+
+    </div>
+      <div id="mapContainer" class="relative w-full mx-auto h-[190vh] rounded-lg bg-white shadow-lg overflow-hidden">
+
+        <canvas id="mapCanvas" class="w-full h-full block"></canvas>
+<div
+          id="textInputBox"
+          class="absolute bg-white border shadow-md rounded px-4 py-2 flex gap-2 hidden"
+        >
+          <input
+            id="textInput"
+            type="text"
+            placeholder="Enter label text..."
+            class="border px-2 py-1 rounded w-64"
+          />
+          <button
+            id="confirmText"
+            class="bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    <script>
+      const nodes = [];
+      const edges = [];
+      let linkStart = null;
+
+      const icons = {
+        info: "https://img.icons8.com/fluency/48/000000/info.png",
+        hand: "https://img.icons8.com/fluency/48/000000/hand.png",
+        alert: "https://img.icons8.com/fluency/48/000000/error.png",
+        target:
+          "https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348394/favicon-32x32_aot5gn.png",
+      };
+
+      const canvas = document.getElementById("mapCanvas");
+      const ctx = canvas.getContext("2d");
+      const container = document.getElementById("mapContainer");
+
+      const textInputBox = document.getElementById("textInputBox");
+      const textInput = document.getElementById("textInput");
+      const confirmBtn = document.getElementById("confirmText");
+      const connectHint = document.getElementById("connectHint");
+
+      let selectedNode = null;
+
+      function resizeCanvas() {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        drawEdges();
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function createNode(
+        type,
+        x = canvas.width / 2 - 24,
+        y = canvas.height / 2 - 24
+      ) {
+        const id = type + "_" + Date.now();
+        const node = { id, x, y, type, text: "" };
+        nodes.push(node);
+        const el = document.createElement("img");
+        el.src = icons[type];
+        el.id = node.id;
+        el.className = "node absolute w-12 h-12";
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        container.appendChild(el);
+
+        const label = document.createElement("div");
+        label.id = node.id + "_text";
+        label.className = "node-text";
+        container.appendChild(label);
+        updateNodeText(node);
+
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (e.shiftKey) {
+            if (linkStart && linkStart.id !== node.id) {
+              document
+                .getElementById(linkStart.id)
+                ?.classList.remove("linking");
+              edges.push({ from: linkStart.id, to: node.id });
+              linkStart = null;
+              connectHint.classList.add("hidden");
+              drawEdges();
+            } else {
+              linkStart = node;
+              connectHint.classList.remove("hidden");
+              el.classList.add("linking");
+            }
+          } else {
+            selectedNode = node;
+            textInputBox.classList.remove("hidden");
+            textInput.value = node.text || "";
+            textInput.focus();
+
+            const iconRect = el.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            textInputBox.style.left = iconRect.left - containerRect.left + "px";
+            textInputBox.style.top =
+              iconRect.top - containerRect.top + 56 + "px";
+          }
+        });
+
+        makeDraggable(el, node);
+      }
+
+      document.querySelectorAll(".add-icon").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.getAttribute("data-type");
+          createNode(type);
+          drawEdges();
+        });
+      });
+
+      confirmBtn.addEventListener("click", submitText);
+      textInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") submitText();
+      });
+
+      window.addEventListener("click", () => {
+        textInputBox.classList.add("hidden");
+        selectedNode = null;
+        if (linkStart) {
+          document.getElementById(linkStart.id)?.classList.remove("linking");
+          linkStart = null;
+          connectHint.classList.add("hidden");
+        }
+      });
+
+      function submitText() {
+        if (!selectedNode) return;
+        selectedNode.text = textInput.value;
+        updateNodeText(selectedNode);
+        textInputBox.classList.add("hidden");
+        selectedNode = null;
+      }
+
+      function updateNodeText(node) {
+        const txtEl = document.getElementById(node.id + "_text");
+        txtEl.textContent = node.text;
+        txtEl.style.left = node.x + 48 + "px";
+        txtEl.style.top = node.y + 12 + "px";
+      }
+
+      function drawEdges() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#9CA3AF";
+        ctx.lineWidth = 2;
+
+        edges.forEach(({ from, to }) => {
+          const n1 = document.getElementById(from);
+          const n2 = document.getElementById(to);
+          if (!n1 || !n2) return;
+
+          const r1 = n1.getBoundingClientRect();
+          const r2 = n2.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+
+          const x1 = r1.left - containerRect.left + r1.width / 2;
+          const y1 = r1.top - containerRect.top + r1.height / 2;
+          const x2 = r2.left - containerRect.left + r2.width / 2;
+          const y2 = r2.top - containerRect.top + r2.height / 2;
+
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+          const size = 8;
+          ctx.beginPath();
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(
+            x2 - size * Math.cos(angle - Math.PI / 6),
+            y2 - size * Math.sin(angle - Math.PI / 6)
+          );
+          ctx.lineTo(
+            x2 - size * Math.cos(angle + Math.PI / 6),
+            y2 - size * Math.sin(angle + Math.PI / 6)
+          );
+          ctx.closePath();
+          ctx.fillStyle = "#9CA3AF";
+          ctx.fill();
+        });
+      }
+      function resizeCanvas() {
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+        drawEdges();
+      }
+
+      function makeDraggable(el, node) {
+        let offsetX, offsetY;
+
+        function onMouseDown(e) {
+          e.preventDefault();
+          offsetX = e.clientX - node.x - container.offsetLeft;
+          offsetY = e.clientY - node.y - container.offsetTop;
+          el.style.cursor = "grabbing";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        }
+
+        function onMouseMove(e) {
+          node.x = e.clientX - offsetX - container.offsetLeft;
+          node.y = e.clientY - offsetY - container.offsetTop;
+          el.style.left = node.x + "px";
+          el.style.top = node.y + "px";
+          updateNodeText(node);
+          drawEdges();
+        }
+
+        function onMouseUp() {
+          el.style.cursor = "grab";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        el.addEventListener("mousedown", onMouseDown);
+      }
+
+      drawEdges();
+    </script>
+    <footer class="container">© 2025 The Boring Learner</footer>
+  </body>
+</html>
