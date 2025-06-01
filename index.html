@@ -16,9 +16,13 @@
       gtag("config", "G-XCF3WLNR9R");
     </script>
     <script>
-  AIDBASE_CHATBOT_ID = 'WFma4ftncTXYfKKOBAiiP';
-</script>
-<script async type="text/javascript" src="https://client.aidbase.ai/chat.ab.js"></script>
+      AIDBASE_CHATBOT_ID = "WFma4ftncTXYfKKOBAiiP";
+    </script>
+    <script
+      async
+      type="text/javascript"
+      src="https://client.aidbase.ai/chat.ab.js"
+    ></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="UTF-8" />
@@ -40,142 +44,153 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --primary: #333;
-        --accent: #f5d547;
-        --bg: #fafafa;
-        --spacing: 1.5rem;
-      }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: 'Inter', sans-serif;
-        color: var(--primary);
-        background: var(--bg) url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L0 0 0 20' fill='none' stroke='%23eaeaea'/%3E%3C/svg%3E") repeat;
-        line-height: 1.6;
-        padding: var(--spacing);
-      }
-      nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: var(--spacing);
-      }
-      .navbar-brand {
-        display: flex;
-        align-items: center;
-        font-weight: 600;
-        font-size: 1.25rem;
-        font-family: 'IBM Plex Mono', monospace;
-      }
-      .navbar-brand img {
-        width: 64px;
-        height: 64px;
-        margin-right: -1em 0.5rem;
-      }
-      .navbar-links a {
-        margin-left: var(--spacing);
-        font-weight: 600;
-        text-decoration: none;
-        color: var(--primary);
-        font-family: 'IBM Plex Mono', monospace;
-      }
-      .container { max-width: 72rem; margin: 0 auto; }
-      /* Additional top margin for hero */
-      #planner { margin-top: calc(var(--spacing) * 2); }
-      /* Hero Title */
-      #planner h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 3rem;
-        text-align: center;
-        margin-bottom: var(--spacing);
-      }
-      /* Highlighted word */
-      .highlight { background-color: var(--accent); padding: -0.2em;}
-      /* Subtitle */
-      #planner .subtitle {
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 1.5rem;
-        text-align: center;
-        margin-bottom: calc(var(--spacing) * 1.5);
-      }
-      .matrix-container { margin-bottom: calc(var(--spacing) * 2); }
-      .matrix {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-        gap: var(--spacing);
-      }
-      .quadrant {
-        background: #fff;
-        /* remove internal padding for full-image cards */
-        padding: var(--spacing);
-        border: 4px solid #000;
-        border-radius: 18px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        position: relative;
-        font-family: 'IBM Plex Mono', monospace;
-        overflow: hidden;
-      }
-      /* For the last card, remove padding so image fills edge-to-edge */
-    /*  .quadrant:last-child {
-        padding: 0;
-      }*/
-      }
-      .quadrant:nth-child(odd) { transform: rotate(-2deg); }
-      .quadrant:nth-child(even) { transform: rotate(2deg); }
-      .quadrant h2, .quadrant .quadrant-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; }
-      .quadrant p { font-size: 0.875rem; margin-bottom: var(--spacing); }
-      .task-input { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem; }
-      .add-task-btn {
-        background: var(--accent);
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 14px;
-        cursor: pointer;
-        font-weight: 600;
-        color: #333;
-        font-family: 'IBM Plex Mono', monospace;
-      }
-      /* Updated Waitlist Button Styling */
-      .wait-button {
-        background: var(--accent);
-        color: var(--primary);
-        border: 2px solid var(--primary);
-        padding: 1rem 1.5rem;
-        margin-left:1rem;
-        border-radius: 0.75rem;
-        cursor: pointer;
-        box-shadow: 4px 4px 0 0 #cfa2ff;
-        transition: transform 0.1s ease-in-out;
-        font-family: 'IBM Plex Mono', monospace;
-      }
-      .wait-button:active {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 0 #cfa2ff;
-      }
-      /* Card image styling */
-      .card-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-      footer { text-align: center; font-size: 0.875rem; color: #777; padding-top: var(--spacing); font-family: 'IBM Plex Mono', monospace; }
+        :root {
+          --primary: #333;
+          --accent: #f5d547;
+          --bg: #fafafa;
+          --spacing: 1.5rem;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: 'Inter', sans-serif;
+          color: var(--primary);
+          background: var(--bg) url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L0 0 0 20' fill='none' stroke='%23eaeaea'/%3E%3C/svg%3E") repeat;
+          line-height: 1.6;
+          padding: var(--spacing);
+        }
+        nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--spacing);
+        }
+        .navbar-brand {
+          display: flex;
+          align-items: center;
+          font-weight: 600;
+          font-size: 1.25rem;
+          font-family: 'IBM Plex Mono', monospace;
+        }
+        .navbar-brand img {
+          width: 64px;
+          height: 64px;
+          margin-right: -1em 0.5rem;
+        }
+        .navbar-links a {
+          margin-left: var(--spacing);
+          font-weight: 600;
+          text-decoration: none;
+          color: var(--primary);
+          font-family: 'IBM Plex Mono', monospace;
+        }
+        .container { max-width: 72rem; margin: 0 auto; }
+        /* Additional top margin for hero */
+        #planner { margin-top: calc(var(--spacing) * 2); }
+        /* Hero Title */
+        #planner h1 {
+          font-family: 'Playfair Display', serif;
+          font-size: 3rem;
+          text-align: center;
+          margin-bottom: var(--spacing);
+        }
+        /* Highlighted word */
+        .highlight { background-color: var(--accent); padding: -0.2em;}
+        /* Subtitle */
+        #planner .subtitle {
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 1.5rem;
+          text-align: center;
+          margin-bottom: calc(var(--spacing) * 1.5);
+        }
+        .matrix-container { margin-bottom: calc(var(--spacing) * 2); }
+        .matrix {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+          gap: var(--spacing);
+        }
+        .quadrant {
+          background: #fff;
+          /* remove internal padding for full-image cards */
+          padding: var(--spacing);
+          border: 4px solid #000;
+          border-radius: 18px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+          position: relative;
+          font-family: 'IBM Plex Mono', monospace;
+          overflow: hidden;
+        }
+        /* For the last card, remove padding so image fills edge-to-edge */
+      /*  .quadrant:last-child {
+          padding: 0;
+        }*/
+        }
+        .quadrant:nth-child(odd) { transform: rotate(-2deg); }
+        .quadrant:nth-child(even) { transform: rotate(2deg); }
+        .quadrant h2, .quadrant .quadrant-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .quadrant p { font-size: 0.875rem; margin-bottom: var(--spacing); }
+        .task-input { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem; }
+        .add-task-btn {
+          background: var(--accent);
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 14px;
+          cursor: pointer;
+          font-weight: 600;
+          color: #333;
+          font-family: 'IBM Plex Mono', monospace;
+        }
+        /* Updated Waitlist Button Styling */
+        .wait-button {
+          background: var(--accent);
+          color: var(--primary);
+          border: 2px solid var(--primary);
+          padding: 1rem 1.5rem;
+          margin-left:1rem;
+          border-radius: 0.75rem;
+          cursor: pointer;
+          box-shadow: 4px 4px 0 0 #cfa2ff;
+          transition: transform 0.1s ease-in-out;
+          font-family: 'IBM Plex Mono', monospace;
+        }
+        .wait-button:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0 0 #cfa2ff;
+        }
+        /* Card image styling */
+        .card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        footer { text-align: center; font-size: 0.875rem; color: #777; padding-top: var(--spacing); font-family: 'IBM Plex Mono', monospace; }
     </style>
-      <meta property="og:title" content="Make learning unboring" />
-<meta property="og:description" content="Map what matters. Build performance-focused systems that help people do better at work." />
-<meta property="og:image" content="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748620513/og-banner_i1wzwd.png" />
-<meta property="og:url" content="https://theboringlearner.com" />
-<meta property="og:type" content="website" />
+    <meta property="og:title" content="Make learning unboring" />
+    <meta
+      property="og:description"
+      content="Map what matters. Build performance-focused systems that help people do better at work."
+    />
+    <meta
+      property="og:image"
+      content="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748620513/og-banner_i1wzwd.png"
+    />
+    <meta property="og:url" content="https://theboringlearner.com" />
+    <meta property="og:type" content="website" />
   </head>
   <body>
     <nav class="navbar container hidden lg:flex">
       <div class="navbar-brand flex items-center gap-2">
-        <img
-          src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
-          alt="theboringlearner logo"
-          class="h-8 w-8"
-        />
-        <span class="text-lg font-bold">The Boring Learner</span>
+        <a
+          href="https://theboringlearner.com"
+          class="flex items-center space-x-2"
+        >
+          <img
+            src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
+            alt="theboringlearner logo"
+            class="h-8 w-8"
+          />
+          <span class="text-lg font-bold">The Boring Learner</span>
+        </a>
       </div>
 
       <div class="navbar-links relative group">
@@ -291,45 +306,82 @@
     </script>
 
     <section id="planner" class="container">
-      <h1>AI can write.<br>You design to <br>improve<span class="highlight"> performance.</span></h1>
-      <p class="subtitle">Start mapping for Action</p>
+      <h1>
+        AI can write.<br />You design to <br />improve<span class="highlight">
+          performance.</span
+        >
+      </h1>
+      <p class="subtitle">
+        Start <span class="highlight">mapping for Action</span>
+      </p>
       <div class="matrix-container">
         <div class="matrix">
           <div class="quadrant">
             <h2>What Boring Really Means</h2>
             <p>
-    Learners who <strong>skip through content</strong>. Who <strong>zone out before slide two</strong>.<br>
-    They’re not bored because they hate learning.<br>
-    They’re bored because the learning <strong>doesn’t help them do anything better</strong>.<br><br>
-    This isn’t a <em>motivation</em> issue. It’s a <strong>design</strong> issue.
-  </p>
+              Learners who <strong>skip through content</strong>. Who
+              <strong>zone out before slide two</strong>.<br />
+              They’re not bored because they hate learning.<br />
+              They’re bored because the learning
+              <strong>doesn’t help them do anything better</strong>.<br /><br />
+              This isn’t a <em>motivation</em> issue. It’s a
+              <strong>design</strong> issue.
+            </p>
           </div>
           <div class="quadrant">
             <h2>Most Training Is Built Backward</h2>
             <p>
-    The SME sends you <strong>everything they know</strong>.<br>
-    You’re expected to turn it into <em>“engaging content”</em>.<br><br>
-    But what if the SME <strong>was part of your design process</strong>?<br>
-    What if you could bring them in <strong>before the content dump</strong>?
-  </p>
+              The SME sends you <strong>everything they know</strong>.<br />
+              You’re expected to turn it into
+              <em>“engaging content”</em>.<br /><br />
+              But what if the SME
+              <strong>was part of your design process</strong>?<br />
+              What if you could bring them in
+              <strong>before the content dump</strong>?
+            </p>
           </div>
           <div class="quadrant">
             <h2>A Chronic Condition</h2>
-             <p>
-    The boring learner is a result of <strong>repeated disappointment</strong> by what workplace learning promises but <strong>fails to deliver</strong>.
-  </p>
+            <img
+              src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748739117/file_00000000011061f8a559ef314f14222e_ph7o9b.png"
+              alt="theboringlearner"
+              class="h-50"
+            />
+            <br />
+            <p>
+              The boring learner is a result of
+              <strong>repeated disappointment</strong> by what workplace
+              learning promises but <strong>fails to deliver</strong>.
+            </p>
           </div>
-          <div class="quadrant">     
+          <div class="quadrant">
             <h2>Make Learning Unboring</h2>
-      <p>
-    I want to help I bring <strong>IDs</strong> and <strong>SMEs</strong> together to design learning that 
-  <strong>changes what people do at work</strong>, not just what they know.
-  </p>
+            <p>
+              I want to help bring <strong>IDs</strong> and
+              <strong>SMEs</strong> together to design learning that
+              <strong>changes what people do at work</strong>, not just what
+              they know.
+            </p>
+            <p class="text-base">
+              <strong>The tool is in progress.</strong><br /><em
+                >You can help shape it.</em
+              >
+            </p>
+            <p class="text-sm text-gray-700">
+              👉 Join the waitlist<br />Be part of the first group to test the
+              mapping playbook.
+            </p>
+            <a
+              href="https://x.com/OwyssWerkin"
+              class="inline-block mt-2 px-4 py-2 bg-black text-white font-semibold rounded-lg hover:bg-gray-800"
+            >
+              Building in public
+            </a>
+          </div>
         </div>
       </div>
-      </div>
     </section>
-    
+
     <footer class="container">© 2025 The Boring Learner</footer>
   </body>
 </html>
