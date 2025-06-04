@@ -166,54 +166,21 @@
   <body>
      <nav class="navbar container hidden lg:flex">
       <div class="navbar-brand flex items-center gap-2">
-        <img
-          src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
-          alt="theboringlearner logo"
-          class="h-8 w-8"
-        />
-        <span class="text-lg font-bold">The Boring Learner</span>
+        <a
+          href="https://theboringlearner.com"
+          class="flex items-center space-x-2"
+        >
+          <img
+            src="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348396/android-chrome-512x512_btavah.png"
+            alt="theboringlearner logo"
+            class="h-8 w-8"
+          />
+          <span class="text-lg font-bold">The Boring Learner</span>
+        </a>
       </div>
 
-      <div class="navbar-links relative group">
-        <div class="relative inline-block">
-          <button class="font-semibold flex items-center gap-1">
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewbox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Helpful Tools
-          </button>
 
-          <div
-            class="absolute left-[-5em] top-full mt-1 w-60 bg-[#f9f6f3] text-black shadow-lg p-3 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto space-y-2"
-          >
-            <a
-              href="https://theboringlearner.com/drip-planner.html"
-              class="block hover:underline"
-              >DRIP Planner</a
-            >
-            <a
-              href="https://theboringlearner.com/action-mapping.html"
-              class="block hover:underline"
-              >Action Mapping</a
-            >
-            <a
-              href="https://theboringlearner.com/goal-task-mapping.html"
-              class="block hover:underline"
-              >Goal Task Mapping</a
-            >
-          </div>
-        </div>
-      </div>
+      
     </nav>
     <!-- Mobile Header -->
     <div class="lg:hidden flex justify-between items-center px-4 py-4">
@@ -243,7 +210,49 @@
       </button>
     </div>
 
-    <!-- Mobile Menu Items -->
+    <!--<div class="navbar-links flex items-center space-x-6">
+  <a
+    href="https://theboringlearner.com/about.html"
+    class="font-mono font-semibold hover:underline"
+  >About</a>
+
+  <div class="relative group">
+    <button class="font-semibold flex items-center gap-1">
+      <svg
+        class="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewbox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      Helpful Tools
+    </button>
+
+    <div
+      class="absolute left-[-5em] top-full mt-1 w-60 bg-[#f9f6f3] text-black shadow-lg p-3 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto space-y-2"
+    >
+      <a
+        href="https://theboringlearner.com/drip-planner.html"
+        class="block hover:underline"
+      >DRIP Planner</a>
+      <a
+        href="https://theboringlearner.com/action-mapping.html"
+        class="block hover:underline"
+      >Action Mapping</a>
+      <a
+        href="https://theboringlearner.com/goal-task-mapping.html"
+        class="block hover:underline"
+      >Goal Task Mapping</a>
+    </div>
+  </div>
+</div>
+ Mobile Menu Items -->
     <div
       id="mobileMenu"
       class="lg:hidden hidden fixed inset-0 bg-[#fafafa] z-50 flex flex-col items-center justify-center text-center space-y-6 text-xl font-mono"
@@ -269,6 +278,11 @@
         href="https://theboringlearner.com/goal-task-mapping.html"
         class="block hover:underline"
         >Goal Task Mapping</a
+      >
+      <a
+        href="https://theboringlearner.com/about.html"
+        class="block hover:underline"
+        >About</a
       >
     </div>
 
