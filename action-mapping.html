@@ -194,50 +194,51 @@
         </a>
       </div>
 
-
-      <div class="navbar-links flex items-center space-x-6">
+     <div class="navbar-links flex items-center space-x-6">
   <a
     href="https://theboringlearner.com/about.html"
     class="font-mono font-semibold hover:underline"
   >About</a>
 
-  <div class="relative group">
-    <button class="font-semibold flex items-center gap-1">
-      <svg
-        class="h-4 w-4"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        viewbox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4v16m8-8H4"
-        />
-      </svg>
-      Helpful Tools
-    </button>
+        <div class="relative group">
+          <button class="font-semibold flex items-center gap-1">
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Helpful Tools
+          </button>
 
-    <div
-      class="absolute left-[-5em] top-full mt-1 w-60 bg-[#f9f6f3] text-black shadow-lg p-3 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto space-y-2"
-    >
-      <a
-        href="https://theboringlearner.com/drip-planner.html"
-        class="block hover:underline"
-      >DRIP Planner</a>
-      <a
-        href="https://theboringlearner.com/action-mapping.html"
-        class="block hover:underline"
-      >Action Mapping</a>
-      <a
-        href="https://theboringlearner.com/goal-task-mapping.html"
-        class="block hover:underline"
-      >Goal Task Mapping</a>
-    </div>
-  </div>
-</div>
-
+          <div
+            class="absolute left-[-5em] top-full mt-1 w-60 bg-[#f9f6f3] text-black shadow-lg p-3 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto space-y-2"
+          >
+            <a
+              href="https://theboringlearner.com/drip-planner.html"
+              class="block hover:underline"
+              >DRIP Planner</a
+            >
+            <a
+              href="https://theboringlearner.com/action-mapping.html"
+              class="block hover:underline"
+              >Action Mapping</a
+            >
+            <a
+              href="https://theboringlearner.com/goal-task-mapping.html"
+              class="block hover:underline"
+              >Goal Task Mapping</a
+            >
+          </div>
+        </div>
+      </div>
     </nav>
     <!-- Mobile Header -->
     <div class="lg:hidden flex justify-between items-center px-4 py-4">
@@ -267,7 +268,7 @@
       </button>
     </div>
 
-    <!-- Mobile Menu Items -->
+<!-- Mobile Menu Items -->
     <div
       id="mobileMenu"
       class="lg:hidden hidden fixed inset-0 bg-[#fafafa] z-50 flex flex-col items-center justify-center text-center space-y-6 text-xl font-mono"
@@ -294,6 +295,7 @@
         class="block hover:underline"
         >Goal Task Mapping</a
       >
+      <a href="/about.html" class="block hover:underline">About</a>
     </div>
 
     <script>
@@ -341,33 +343,39 @@
             class="w-8 h-8"
           />
         </button>
-        <span id="connectHint" class="text-sm text-blue-600 hidden"
-          >Shift-click another node to connect</span
-        >
-      </div>
+        <span id="connectHint" class="text-sm text-blue-600">
+  Double-tap or Shift+Click another node to connect
+</span>
 
+      </div>
     </div>
-      <div id="mapContainer" class="relative w-full mx-auto h-[90vh] rounded-lg bg-white shadow-lg overflow-hidden">
-
-        <canvas id="mapCanvas" class="w-full h-full block"></canvas>
-<div
-          id="textInputBox"
-          class="absolute bg-white border shadow-md rounded px-4 py-2 flex gap-2 hidden"
+    <div
+      id="mapContainer"
+      class="relative w-full mx-auto h-[90vh] rounded-lg bg-white shadow-lg overflow-hidden"
+    >
+      <canvas id="mapCanvas" class="w-full h-full block"></canvas>
+      <div
+        id="textInputBox"
+        class="absolute bg-white border shadow-md rounded px-4 py-2 flex gap-2 hidden"
+      >
+        <input
+          id="textInput"
+          type="text"
+          placeholder="Enter label text..."
+          class="border px-2 py-1 rounded w-64"
+        />
+        <button
+          id="confirmText"
+          class="bg-blue-500 text-white px-3 py-1 rounded"
         >
-          <input
-            id="textInput"
-            type="text"
-            placeholder="Enter label text..."
-            class="border px-2 py-1 rounded w-64"
-          />
-          <button
-            id="confirmText"
-            class="bg-blue-500 text-white px-3 py-1 rounded"
-          >
-            Add
-          </button>
-        </div>
+          Add
+        </button>
       </div>
+    </div>
+    <div class="text-center mt-6">
+      <button id="preview-btn" class="wait-button">Preview and Save PDF</button>
+    </div>
+
     <script>
       const nodes = [];
       const edges = [];
@@ -422,35 +430,41 @@
         container.appendChild(label);
         updateNodeText(node);
 
-        el.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (e.shiftKey) {
-            if (linkStart && linkStart.id !== node.id) {
-              document
-                .getElementById(linkStart.id)
-                ?.classList.remove("linking");
-              edges.push({ from: linkStart.id, to: node.id });
-              linkStart = null;
-              connectHint.classList.add("hidden");
-              drawEdges();
-            } else {
-              linkStart = node;
-              connectHint.classList.remove("hidden");
-              el.classList.add("linking");
-            }
-          } else {
-            selectedNode = node;
-            textInputBox.classList.remove("hidden");
-            textInput.value = node.text || "";
-            textInput.focus();
+        let lastTap = 0;
 
-            const iconRect = el.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            textInputBox.style.left = iconRect.left - containerRect.left + "px";
-            textInputBox.style.top =
-              iconRect.top - containerRect.top + 56 + "px";
-          }
-        });
+el.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const now = new Date().getTime();
+  const tapLength = now - lastTap;
+  lastTap = now;
+
+  if ((tapLength < 300 && tapLength > 0) || e.shiftKey) {
+    // Double-tap or shift-click = connect mode
+    if (linkStart && linkStart.id !== node.id) {
+      document.getElementById(linkStart.id)?.classList.remove("linking");
+      edges.push({ from: linkStart.id, to: node.id });
+      linkStart = null;
+      connectHint.classList.add("hidden");
+      drawEdges();
+    } else {
+      linkStart = node;
+      el.classList.add("linking");
+      connectHint.classList.remove("hidden");
+    }
+  } else {
+    // Single tap — open label input
+    selectedNode = node;
+    textInputBox.classList.remove("hidden");
+    textInput.value = node.text || "";
+    textInput.focus();
+
+    const iconRect = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    textInputBox.style.left = iconRect.left - containerRect.left + "px";
+    textInputBox.style.top =
+      iconRect.top - containerRect.top + 56 + "px";
+  }
+});
 
         makeDraggable(el, node);
       }
@@ -534,44 +548,161 @@
           ctx.fill();
         });
       }
-      function resizeCanvas() {
-        canvas.width = container.offsetWidth;
-        canvas.height = container.offsetHeight;
-        drawEdges();
-      }
+      
 
       function makeDraggable(el, node) {
-        let offsetX, offsetY;
+  let offsetX, offsetY;
 
-        function onMouseDown(e) {
-          e.preventDefault();
-          offsetX = e.clientX - node.x - container.offsetLeft;
-          offsetY = e.clientY - node.y - container.offsetTop;
-          el.style.cursor = "grabbing";
-          document.addEventListener("mousemove", onMouseMove);
-          document.addEventListener("mouseup", onMouseUp);
-        }
+  function startDrag(x, y) {
+    offsetX = x - node.x - container.offsetLeft;
+    offsetY = y - node.y - container.offsetTop;
+  }
 
-        function onMouseMove(e) {
-          node.x = e.clientX - offsetX - container.offsetLeft;
-          node.y = e.clientY - offsetY - container.offsetTop;
-          el.style.left = node.x + "px";
-          el.style.top = node.y + "px";
-          updateNodeText(node);
-          drawEdges();
-        }
+  function onMove(x, y) {
+    node.x = x - offsetX - container.offsetLeft;
+    node.y = y - offsetY - container.offsetTop;
+    el.style.left = node.x + "px";
+    el.style.top = node.y + "px";
+    updateNodeText(node);
+    drawEdges();
+  }
 
-        function onMouseUp() {
-          el.style.cursor = "grab";
-          document.removeEventListener("mousemove", onMouseMove);
-          document.removeEventListener("mouseup", onMouseUp);
-        }
+  function onMouseDown(e) {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+    el.style.cursor = "grabbing";
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }
 
-        el.addEventListener("mousedown", onMouseDown);
-      }
+  function onMouseMove(e) {
+    onMove(e.clientX, e.clientY);
+  }
 
-      drawEdges();
+  function onMouseUp() {
+    el.style.cursor = "grab";
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+  }
+
+  function onTouchStart(e) {
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
+    document.addEventListener("touchend", onTouchEnd);
+  }
+
+  function onTouchMove(e) {
+    const touch = e.touches[0];
+    onMove(touch.clientX, touch.clientY);
+    e.preventDefault();
+  }
+
+  function onTouchEnd() {
+    document.removeEventListener("touchmove", onTouchMove);
+    document.removeEventListener("touchend", onTouchEnd);
+  }
+
+  el.addEventListener("mousedown", onMouseDown);
+  el.addEventListener("touchstart", onTouchStart, { passive: false });
+}
+
     </script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    function drawPreviewCanvas() {
+      const previewCanvas = document.getElementById("preview-canvas");
+      const ctx = previewCanvas.getContext("2d");
+      previewCanvas.width = canvas.width;
+      previewCanvas.height = canvas.height;
+      ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+      ctx.strokeStyle = "#9CA3AF";
+      ctx.lineWidth = 2;
+      ctx.font = "12px IBM Plex Mono";
+      ctx.fillStyle = "#374151";
+
+      edges.forEach(({ from, to }) => {
+        const n1 = nodes.find((n) => n.id === from);
+        const n2 = nodes.find((n) => n.id === to);
+        if (!n1 || !n2) return;
+
+        const x1 = n1.x + 24;
+        const y1 = n1.y + 24;
+        const x2 = n2.x + 24;
+        const y2 = n2.y + 24;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const size = 8;
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(
+          x2 - size * Math.cos(angle - Math.PI / 6),
+          y2 - size * Math.sin(angle - Math.PI / 6)
+        );
+        ctx.lineTo(
+          x2 - size * Math.cos(angle + Math.PI / 6),
+          y2 - size * Math.sin(angle + Math.PI / 6)
+        );
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      nodes.forEach((node) => {
+        const icon = new Image();
+        icon.src = icons[node.type];
+        icon.onload = () => {
+          ctx.drawImage(icon, node.x, node.y, 48, 48);
+          if (node.text) {
+            ctx.fillText(node.text, node.x + 52, node.y + 24);
+          }
+        };
+      });
+    }
+
+    document.getElementById("preview-btn").addEventListener("click", () => {
+      drawPreviewCanvas();
+      document.getElementById("preview-modal").classList.remove("hidden");
+    });
+
+    document.getElementById("close-preview").addEventListener("click", () => {
+      document.getElementById("preview-modal").classList.add("hidden");
+    });
+
+    document
+      .getElementById("save-pdf-btn")
+      .addEventListener("click", () => window.print());
+  });
+</script>
+
     <footer class="container">© 2025 The Boring Learner</footer>
+
+    <div
+      id="preview-modal"
+      class="hidden fixed inset-0 bg-white p-4 overflow-auto z-50"
+    >
+      <button
+        id="close-preview"
+        class="absolute top-4 right-6 text-xl font-bold"
+      >
+        &times;
+      </button>
+      <div class="max-w-6xl mx-auto" id="preview-content">
+        <h2 class="text-center text-2xl font-bold mb-4">
+          Action Mapping Preview
+        </h2>
+        <canvas
+          id="preview-canvas"
+          class="w-full border shadow-lg mb-4"
+        ></canvas>
+      </div>
+      <div class="text-center">
+        <button id="save-pdf-btn" class="wait-button">Print to PDF</button>
+      </div>
+    </div>
   </body>
 </html>
