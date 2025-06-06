@@ -332,8 +332,8 @@
       <h1>Action <span class="highlight">Mapping</span></h1>
       <p class="text-center text-sm text-gray-600 max-w-xl mx-auto mt-2">
         Add your goal or tasks. Name each node clearly.
-        <br />Drag and arrange freely. <br />Double-tap or Shift+Click another
-        node to connect
+        <br />Drag and arrange freely. <br />Double-tap another
+        node to connect or disconnect
       </p>
     </section>
     <div id="root" class="max-w-lg mx-auto mt-10">
@@ -501,34 +501,30 @@
           const tapLength = now - lastTap;
           lastTap = now;
 
-          if ((tapLength < 300 && tapLength > 0) || e.shiftKey) {
-            // Double-tap or shift-click = connect mode
-            if (linkStart && linkStart.id !== node.id) {
-              document
-                .getElementById(linkStart.id)
-                ?.classList.remove("linking");
-              edges.push({ from: linkStart.id, to: node.id });
-              linkStart = null;
-              connectHint.classList.add("hidden");
-              drawEdges();
-            } else {
-              linkStart = node;
-              el.classList.add("linking");
-              connectHint.classList.remove("hidden");
-            }
-          } else {
-            // Single tap — open label input
-            selectedNode = node;
-            textInputBox.classList.remove("hidden");
-            textInput.value = node.text || "";
-            textInput.focus();
+         if ((tapLength < 300 && tapLength > 0) || e.shiftKey) {
+  if (linkStart && linkStart.id !== node.id) {
+    const existing = edges.find(
+      (edge) =>
+        (edge.from === linkStart.id && edge.to === node.id) ||
+        (edge.from === node.id && edge.to === linkStart.id)
+    );
+    if (existing) {
+      edges.splice(edges.indexOf(existing), 1); // remove link
+    } else {
+      edges.push({ from: linkStart.id, to: node.id }); // add link
+    }
 
-            const iconRect = el.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            textInputBox.style.left = iconRect.left - containerRect.left + "px";
-            textInputBox.style.top =
-              iconRect.top - containerRect.top + 56 + "px";
-          }
+    document.getElementById(linkStart.id)?.classList.remove("linking");
+    linkStart = null;
+    connectHint.classList.add("hidden");
+    drawEdges();
+  } else {
+    linkStart = node;
+    el.classList.add("linking");
+    connectHint.classList.remove("hidden");
+  }
+}
+
         });
 
         makeDraggable(el, node);
