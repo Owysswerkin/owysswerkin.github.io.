@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCF3WLNR9R"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-XCF3WLNR9R');
-</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Action Mapping Tool</title>
+    <title>Goal Task Mapping Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- ✅ Favicon -->
     <link
       rel="icon"
@@ -20,7 +12,6 @@
       sizes="32x32"
       href="https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348394/favicon-32x32_aot5gn.png"
     />
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
       #mapCanvas {
         z-index: 0;
@@ -332,8 +323,8 @@
       <h1>Action <span class="highlight">Mapping</span></h1>
       <p class="text-center text-sm text-gray-600 max-w-xl mx-auto mt-2">
         Add your goal or tasks. Name each node clearly.
-        <br />Drag and arrange freely. <br />Double-tap another
-        node to connect or disconnect
+        <br />Drag and arrange freely. <br />Double-tap or Shift+Click another
+        node to connect
       </p>
     </section>
     <div id="root" class="max-w-lg mx-auto mt-10">
@@ -440,152 +431,21 @@
     </div>
 
     <script>
-      const nodes = [];
-      const edges = [];
-      let linkStart = null;
-
-      const icons = {
-        info: "https://img.icons8.com/fluency/48/000000/info.png",
-        hand: "https://img.icons8.com/fluency/48/000000/hand.png",
-        alert: "https://img.icons8.com/fluency/48/000000/error.png",
-        target:
-          "https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348394/favicon-32x32_aot5gn.png",
-      };
-
-      const canvas = document.getElementById("mapCanvas");
-      const ctx = canvas.getContext("2d");
-      const container = document.getElementById("mapContainer");
-
-      const textInputBox = document.getElementById("textInputBox");
-      const textInput = document.getElementById("textInput");
-      const confirmBtn = document.getElementById("confirmText");
-      const connectHint = document.getElementById("connectHint");
-
-      let selectedNode = null;
-
-      function resizeCanvas() {
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-        drawEdges();
-      }
-      window.addEventListener("resize", resizeCanvas);
-      resizeCanvas();
-
-      function createNode(
-        type,
-        x = canvas.width / 2 - 24,
-        y = canvas.height / 2 - 24
-      ) {
-        const id = type + "_" + Date.now();
-        const node = { id, x, y, type, text: "" };
-        nodes.push(node);
-        const el = document.createElement("img");
-        el.src = icons[type];
-        el.id = node.id;
-        el.className = "node absolute w-12 h-12";
-        el.style.left = x + "px";
-        el.style.top = y + "px";
-        container.appendChild(el);
-
-        const label = document.createElement("div");
-        label.id = node.id + "_text";
-        label.className = "node-text";
-        container.appendChild(label);
-        updateNodeText(node);
-
-        let lastTap = 0;
-
-        el.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const now = new Date().getTime();
-          const tapLength = now - lastTap;
-          lastTap = now;
-
-         if ((tapLength < 300 && tapLength > 0) || e.shiftKey) {
-  if (linkStart && linkStart.id !== node.id) {
-    const existing = edges.find(
-      (edge) =>
-        (edge.from === linkStart.id && edge.to === node.id) ||
-        (edge.from === node.id && edge.to === linkStart.id)
-    );
-    if (existing) {
-      edges.splice(edges.indexOf(existing), 1); // remove link
-    } else {
-      edges.push({ from: linkStart.id, to: node.id }); // add link
-    }
-
-    document.getElementById(linkStart.id)?.classList.remove("linking");
-    linkStart = null;
-    connectHint.classList.add("hidden");
-    drawEdges();
-  } else {
-    linkStart = node;
-    el.classList.add("linking");
-    connectHint.classList.remove("hidden");
-  }
-}
-
-        });
-
-        makeDraggable(el, node);
-      }
-
-      document.querySelectorAll(".add-icon").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const type = btn.getAttribute("data-type");
-          createNode(type);
-          drawEdges();
-        });
-      });
-
-      confirmBtn.addEventListener("click", submitText);
-      textInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") submitText();
-      });
-
-      window.addEventListener("click", () => {
-        textInputBox.classList.add("hidden");
-        selectedNode = null;
-        if (linkStart) {
-          document.getElementById(linkStart.id)?.classList.remove("linking");
-          linkStart = null;
-          connectHint.classList.add("hidden");
-        }
-      });
-
-      function submitText() {
-        if (!selectedNode) return;
-        selectedNode.text = textInput.value;
-        updateNodeText(selectedNode);
-        textInputBox.classList.add("hidden");
-        selectedNode = null;
-      }
-
-      function updateNodeText(node) {
-        const txtEl = document.getElementById(node.id + "_text");
-        txtEl.textContent = node.text;
-        txtEl.style.left = node.x + 48 + "px";
-        txtEl.style.top = node.y + 12 + "px";
-      }
-
       function drawEdges() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = "#9CA3AF";
         ctx.lineWidth = 2;
 
         edges.forEach(({ from, to }) => {
-          const n1 = document.getElementById(from);
-          const n2 = document.getElementById(to);
-          if (!n1 || !n2) return;
+          const node1 = nodes.find((n) => n.id === from);
+          const node2 = nodes.find((n) => n.id === to);
+          if (!node1 || !node2) return;
 
-          const r1 = n1.getBoundingClientRect();
-          const r2 = n2.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-
-          const x1 = r1.left - containerRect.left + r1.width / 2;
-          const y1 = r1.top - containerRect.top + r1.height / 2;
-          const x2 = r2.left - containerRect.left + r2.width / 2;
-          const y2 = r2.top - containerRect.top + r2.height / 2;
+          // center of icon is at x+24, y+24 (icon is 48×48)
+          const x1 = node1.x + 24;
+          const y1 = node1.y + 24;
+          const x2 = node2.x + 24;
+          const y2 = node2.y + 24;
 
           ctx.beginPath();
           ctx.moveTo(x1, y1);
@@ -609,72 +469,7 @@
           ctx.fill();
         });
       }
-      document
-        .getElementById("closeIntroHint")
-        .addEventListener("click", () => {
-          document.getElementById("introHint").style.display = "none";
-        });
 
-      function makeDraggable(el, node) {
-        let offsetX, offsetY;
-
-        function startDrag(x, y) {
-          offsetX = x - node.x - container.offsetLeft;
-          offsetY = y - node.y - container.offsetTop;
-        }
-
-        function onMove(x, y) {
-          node.x = x - offsetX - container.offsetLeft;
-          node.y = y - offsetY - container.offsetTop;
-          el.style.left = node.x + "px";
-          el.style.top = node.y + "px";
-          updateNodeText(node);
-          drawEdges();
-        }
-
-        function onMouseDown(e) {
-          e.preventDefault();
-          startDrag(e.clientX, e.clientY);
-          el.style.cursor = "grabbing";
-          document.addEventListener("mousemove", onMouseMove);
-          document.addEventListener("mouseup", onMouseUp);
-        }
-
-        function onMouseMove(e) {
-          onMove(e.clientX, e.clientY);
-        }
-
-        function onMouseUp() {
-          el.style.cursor = "grab";
-          document.removeEventListener("mousemove", onMouseMove);
-          document.removeEventListener("mouseup", onMouseUp);
-        }
-
-        function onTouchStart(e) {
-          const touch = e.touches[0];
-          startDrag(touch.clientX, touch.clientY);
-          document.addEventListener("touchmove", onTouchMove, {
-            passive: false,
-          });
-          document.addEventListener("touchend", onTouchEnd);
-        }
-
-        function onTouchMove(e) {
-          const touch = e.touches[0];
-          onMove(touch.clientX, touch.clientY);
-          e.preventDefault();
-        }
-
-        function onTouchEnd() {
-          document.removeEventListener("touchmove", onTouchMove);
-          document.removeEventListener("touchend", onTouchEnd);
-        }
-
-        el.addEventListener("mousedown", onMouseDown);
-        el.addEventListener("touchstart", onTouchStart, { passive: false });
-      }
-    </script>
-    <script>
       document.addEventListener("DOMContentLoaded", () => {
         function drawPreviewCanvas() {
           const previewCanvas = document.getElementById("preview-canvas");
@@ -745,6 +540,229 @@
           .getElementById("save-pdf-btn")
           .addEventListener("click", () => window.print());
       });
+      
+      const nodes = [];
+      const edges = [];
+      let linkStart = null;
+
+      const icons = {
+        info: "https://img.icons8.com/fluency/48/000000/info.png",
+        hand: "https://img.icons8.com/fluency/48/000000/hand.png",
+        alert: "https://img.icons8.com/fluency/48/000000/error.png",
+        target:
+          "https://res.cloudinary.com/dylxm9fqw/image/upload/v1748348394/favicon-32x32_aot5gn.png",
+      };
+
+      const canvas = document.getElementById("mapCanvas");
+      const ctx = canvas.getContext("2d");
+      const container = document.getElementById("mapContainer");
+
+      const textInputBox = document.getElementById("textInputBox");
+      const textInput = document.getElementById("textInput");
+      const confirmBtn = document.getElementById("confirmText");
+
+      let selectedNode = null;
+
+      function resizeCanvas() {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        drawEdges();
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function createNode(
+        type,
+        x = canvas.width / 2 - 24,
+        y = canvas.height / 2 - 24
+      ) {
+        const id = type + "_" + Date.now();
+        const node = { id, x, y, type, text: "" };
+        nodes.push(node);
+        const el = document.createElement("img");
+        el.src = icons[type];
+        el.id = node.id;
+        el.className = "node absolute w-12 h-12";
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        container.appendChild(el);
+
+        const label = document.createElement("div");
+        label.id = node.id + "_text";
+        label.className = "node-text";
+        container.appendChild(label);
+        updateNodeText(node);
+
+        let tapTimeout = null;
+
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+
+          if (e.shiftKey) {
+            handleLinkToggle(node, el);
+            return;
+          }
+
+          if (tapTimeout) {
+            clearTimeout(tapTimeout);
+            tapTimeout = null;
+            handleLinkToggle(node, el); // double-click
+          } else {
+            tapTimeout = setTimeout(() => {
+              tapTimeout = null;
+              showTextInput(node, el);
+            }, 250);
+          }
+        });
+
+        makeDraggable(el, node);
+      }
+
+      document.querySelectorAll(".add-icon").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.getAttribute("data-type");
+          createNode(type);
+          drawEdges();
+        });
+      });
+
+      confirmBtn.addEventListener("click", submitText);
+      textInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") submitText();
+      });
+
+      window.addEventListener("click", () => {
+        textInputBox.classList.add("hidden");
+        selectedNode = null;
+        if (linkStart) {
+          document.getElementById(linkStart.id)?.classList.remove("linking");
+          linkStart = null;
+        }
+      });
+
+      function handleLinkToggle(node, el) {
+        if (linkStart && linkStart.id !== node.id) {
+          const existing = edges.find(
+            (edge) =>
+              (edge.from === linkStart.id && edge.to === node.id) ||
+              (edge.from === node.id && edge.to === linkStart.id)
+          );
+          if (existing) {
+            edges.splice(edges.indexOf(existing), 1);
+          } else {
+            edges.push({ from: linkStart.id, to: node.id });
+          }
+
+          document.getElementById(linkStart.id)?.classList.remove("linking");
+          linkStart = null;
+
+          // Fixed: Remove setTimeout and call drawEdges immediately
+          drawEdges();
+        } else {
+          linkStart = node;
+          el.classList.add("linking");
+        }
+      }
+
+      function showTextInput(node, el) {
+        selectedNode = node;
+        textInputBox.classList.remove("hidden");
+        textInput.value = node.text || "";
+        textInput.focus();
+
+        const iconRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        textInputBox.style.left = iconRect.left - containerRect.left + "px";
+        textInputBox.style.top = iconRect.top - containerRect.top + 56 + "px";
+      }
+
+      function submitText() {
+        if (!selectedNode) return;
+        selectedNode.text = textInput.value;
+        updateNodeText(selectedNode);
+        textInputBox.classList.add("hidden");
+        selectedNode = null;
+      }
+
+      function updateNodeText(node) {
+        const txtEl = document.getElementById(node.id + "_text");
+        txtEl.textContent = node.text;
+        txtEl.style.left = node.x + 48 + "px";
+        txtEl.style.top = node.y + 12 + "px";
+      }
+      
+      document
+        .getElementById("closeIntroHint")
+        .addEventListener("click", () => {
+          document.getElementById("introHint").style.display = "none";
+        });
+
+      function makeDraggable(el, node) {
+        let offsetX, offsetY;
+
+        function startDrag(x, y) {
+          offsetX = x - node.x - container.offsetLeft;
+          offsetY = y - node.y - container.offsetTop;
+        }
+
+        function onMove(x, y) {
+          node.x = x - offsetX - container.offsetLeft;
+          node.y = y - offsetY - container.offsetTop;
+          el.style.left = node.x + "px";
+          el.style.top = node.y + "px";
+          updateNodeText(node);
+          drawEdges();
+
+          if (selectedNode && selectedNode.id === node.id) {
+            const iconRect = el.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            textInputBox.style.left = iconRect.left - containerRect.left + "px";
+            textInputBox.style.top =
+              iconRect.top - containerRect.top + 56 + "px";
+          }
+        }
+
+        function onMouseDown(e) {
+          e.preventDefault();
+          startDrag(e.clientX, e.clientY);
+          el.style.cursor = "grabbing";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
+        }
+
+        function onMouseMove(e) {
+          onMove(e.clientX, e.clientY);
+        }
+
+        function onMouseUp() {
+          el.style.cursor = "grab";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        function onTouchStart(e) {
+          const touch = e.touches[0];
+          startDrag(touch.clientX, touch.clientY);
+          document.addEventListener("touchmove", onTouchMove, {
+            passive: false,
+          });
+          document.addEventListener("touchend", onTouchEnd);
+        }
+
+        function onTouchMove(e) {
+          const touch = e.touches[0];
+          onMove(touch.clientX, touch.clientY);
+          e.preventDefault();
+        }
+
+        function onTouchEnd() {
+          document.removeEventListener("touchmove", onTouchMove);
+          document.removeEventListener("touchend", onTouchEnd);
+        }
+
+        el.addEventListener("mousedown", onMouseDown);
+        el.addEventListener("touchstart", onTouchStart, { passive: false });
+      }
     </script>
 
     <footer class="container">© 2025 The Boring Learner</footer>
